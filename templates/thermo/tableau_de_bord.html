@@ -26,7 +26,7 @@
     <div class="card">
       <h2 class="h2">Derniers bâtiments</h2>
       {% if batiments %}
-        <div class="table">
+        <div class="table table--4">
           <div class="table__head">
             <div>Nom</div>
             <div>Classe</div>
@@ -35,7 +35,10 @@
           </div>
           {% for b in batiments %}
             <div class="table__row">
-              <div class="strong">{{ b.nom }}</div>
+              <div>
+                <div class="strong">{{ b.nom }}</div>
+                <div class="muted" style="font-size:12px; margin-top:4px">{{ b.categorie.nom }}</div>
+              </div>
               <div>{% include "partials/badge_classe.html" with classe=b.classe_energie %}</div>
               <div class="mono">{{ b.consommation_kwh_m2_an|floatformat:2 }} kWh/m²/an</div>
               <div><a class="link" href="{% url 'thermo:batiment_detail' b.pk %}">Ouvrir →</a></div>

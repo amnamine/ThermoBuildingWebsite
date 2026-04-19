@@ -18,9 +18,14 @@
         {{ form.nom }}
       </div>
       <div class="field">
-        <label class="label" for="{{ form.surface_habitable_m2.id_for_label }}">Surface habitable (m²)</label>
-        {{ form.surface_habitable_m2 }}
+        <label class="label" for="{{ form.categorie.id_for_label }}">Type de bâtiment</label>
+        {{ form.categorie }}
       </div>
+    </div>
+
+    <div class="field">
+      <label class="label" for="{{ form.surface_habitable_m2.id_for_label }}">Surface habitable (m²)</label>
+      {{ form.surface_habitable_m2 }}
     </div>
 
     <div class="field">

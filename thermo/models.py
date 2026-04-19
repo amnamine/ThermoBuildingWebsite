@@ -41,10 +41,31 @@ class TypeOuvrant(CoefficientBase):
     pass
 
 
+class CategorieBatiment(models.Model):
+    """
+    Type de bâtiment (école, hôpital, etc.) tel que mentionné dans l'énoncé.
+    """
+
+    nom = models.CharField(max_length=120, unique=True)
+    actif = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["nom"]
+
+    def __str__(self) -> str:
+        return self.nom
+
+
 class Batiment(models.Model):
     nom = models.CharField(max_length=140)
     description = models.TextField(blank=True)
     cree_le = models.DateTimeField(default=timezone.now, editable=False)
+
+    categorie = models.ForeignKey(
+        CategorieBatiment,
+        verbose_name="Type de bâtiment",
+        on_delete=models.PROTECT,
+    )
 
     surface_habitable_m2 = models.DecimalField(
         "Surface habitable (m²)",
@@ -114,9 +135,8 @@ class Batiment(models.Model):
         # afin d'obtenir un indicateur en kWh/m²/an, comme demandé dans l'énoncé.
         return self.deperdition_totale / self.surface_habitable_m2
 
-    @property
-    def classe_energie(self) -> str:
-        c = self.consommation_kwh_m2_an
+    @staticmethod
+    def classe_depuis_conso(c: Decimal) -> str:
         if c < Decimal("70"):
             return "A"
         if c <= Decimal("110"):
@@ -130,6 +150,10 @@ class Batiment(models.Model):
         if c <= Decimal("420"):
             return "F"
         return "G"
+
+    @property
+    def classe_energie(self) -> str:
+        return self.classe_depuis_conso(self.consommation_kwh_m2_an)
 
     def __str__(self) -> str:
         return self.nom

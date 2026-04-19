@@ -4,39 +4,99 @@
   <div class="pagehead">
     <div>
       <h1 class="h1">Bâtiments</h1>
-      <p class="muted">Liste complète des bâtiments et leur performance énergétique.</p>
+      <p class="muted">Recherchez, filtrez et triez vos bâtiments selon leur performance énergétique.</p>
     </div>
     <div class="pagehead__actions">
       <a class="btn btn--primary" href="{% url 'thermo:batiment_creer' %}">Nouveau bâtiment</a>
     </div>
   </div>
 
+  <form class="card filters" method="get">
+    <div class="filters__grid">
+      <div class="field">
+        <label class="label" for="q">Recherche</label>
+        <input class="form-control" id="q" name="q" value="{{ q }}" placeholder="Nom ou description…" />
+      </div>
+
+      <div class="field">
+        <label class="label" for="categorie">Type de bâtiment</label>
+        <select class="form-control" id="categorie" name="categorie">
+          <option value="">Tous</option>
+          {% for c in categories %}
+            <option value="{{ c.pk }}" {% if categorie_id == c.pk|stringformat:"s" %}selected{% endif %}>{{ c.nom }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="label" for="classe">Classe énergétique</label>
+        <select class="form-control" id="classe" name="classe">
+          <option value="" {% if not classe %}selected{% endif %}>Toutes</option>
+          {% for letter in "ABCDEFG"|make_list %}
+            <option value="{{ letter }}" {% if classe == letter %}selected{% endif %}>{{ letter }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="label" for="tri">Tri</label>
+        <select class="form-control" id="tri" name="tri">
+          <option value="cree_desc" {% if tri == "cree_desc" %}selected{% endif %}>Plus récent</option>
+          <option value="cree_asc" {% if tri == "cree_asc" %}selected{% endif %}>Plus ancien</option>
+          <option value="nom_asc" {% if tri == "nom_asc" %}selected{% endif %}>Nom (A→Z)</option>
+          <option value="nom_desc" {% if tri == "nom_desc" %}selected{% endif %}>Nom (Z→A)</option>
+          <option value="conso_asc" {% if tri == "conso_asc" %}selected{% endif %}>Conso (croissante)</option>
+          <option value="conso_desc" {% if tri == "conso_desc" %}selected{% endif %}>Conso (décroissante)</option>
+          <option value="deperd_desc" {% if tri == "deperd_desc" %}selected{% endif %}>Déperdition (décroissante)</option>
+          <option value="classe_asc" {% if tri == "classe_asc" %}selected{% endif %}>Classe (A→G)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filters__actions">
+      <button class="btn btn--primary" type="submit">Appliquer</button>
+      <a class="btn btn--ghost" href="{% url 'thermo:batiment_liste' %}">Réinitialiser</a>
+    </div>
+  </form>
+
   <div class="card">
-    {% if batiments %}
+    {% if page_obj.object_list %}
       <div class="table">
         <div class="table__head">
           <div>Nom</div>
+          <div>Type</div>
           <div>Classe</div>
           <div>Conso (kWh/m²/an)</div>
-          <div>Déperdition totale</div>
           <div></div>
         </div>
-        {% for b in batiments %}
+        {% for b in page_obj %}
           <div class="table__row">
             <div class="strong">{{ b.nom }}</div>
+            <div class="muted">{{ b.categorie.nom }}</div>
             <div>{% include "partials/badge_classe.html" with classe=b.classe_energie %}</div>
             <div class="mono">{{ b.consommation_kwh_m2_an|floatformat:2 }}</div>
-            <div class="mono">{{ b.deperdition_totale|floatformat:2 }}</div>
             <div><a class="link" href="{% url 'thermo:batiment_detail' b.pk %}">Détails →</a></div>
           </div>
         {% endfor %}
       </div>
+
+      {% if page_obj.paginator.num_pages > 1 %}
+        <div class="pagination">
+          {% if page_obj.has_previous %}
+            <a class="btn btn--ghost" href="?q={{ q|urlencode }}&categorie={{ categorie_id|urlencode }}&classe={{ classe|urlencode }}&tri={{ tri|urlencode }}&page={{ page_obj.previous_page_number }}">Précédent</a>
+          {% endif %}
+          <div class="muted">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</div>
+          {% if page_obj.has_next %}
+            <a class="btn btn--ghost" href="?q={{ q|urlencode }}&categorie={{ categorie_id|urlencode }}&classe={{ classe|urlencode }}&tri={{ tri|urlencode }}&page={{ page_obj.next_page_number }}">Suivant</a>
+          {% endif %}
+        </div>
+      {% endif %}
     {% else %}
       <div class="empty">
         <div class="empty__icon">+</div>
         <div>
-          <div class="strong">Aucun bâtiment.</div>
-          <div class="muted">Créez votre premier bâtiment pour démarrer.</div>
+          <div class="strong">Aucun résultat.</div>
+          <div class="muted">Ajustez les filtres ou créez un nouveau bâtiment.</div>
         </div>
       </div>
     {% endif %}

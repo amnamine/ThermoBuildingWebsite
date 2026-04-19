@@ -5,6 +5,7 @@
     <div>
       <div class="kicker">Bâtiment</div>
       <h1 class="h1">{{ batiment.nom }}</h1>
+      <div class="muted">Type : <span class="strong">{{ batiment.categorie.nom }}</span></div>
       {% if batiment.description %}<p class="muted">{{ batiment.description }}</p>{% endif %}
     </div>
     <div class="pagehead__actions">
@@ -28,6 +29,7 @@
         <div class="kv">
           <div class="kv__row"><div>Déperdition totale</div><div class="mono">{{ batiment.deperdition_totale|floatformat:2 }}</div></div>
           <div class="kv__row"><div>Surface habitable</div><div class="mono">{{ batiment.surface_habitable_m2|floatformat:2 }} m²</div></div>
+          <div class="kv__row"><div>Type de bâtiment</div><div class="mono">{{ batiment.categorie.nom }}</div></div>
         </div>
       </div>
     </div>

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Matériaux & coefficients — Meriel Thermique{% endblock %}
+{% block content %}
+  <div class="pagehead">
+    <div>
+      <h1 class="h1">Matériaux & coefficients</h1>
+      <p class="muted">Gérez les types (listes déroulantes) et leurs coefficients <span class="mono">k</span> utilisés dans les calculs.</p>
+    </div>
+    <div class="pagehead__actions">
+      <a class="btn btn--ghost" href="{% url 'thermo:batiment_liste' %}">Retour aux bâtiments</a>
+    </div>
+  </div>
+
+  <section class="grid grid--2">
+    <div class="card">
+      <div class="pagehead" style="margin-bottom:10px">
+        <h2 class="h2" style="margin:0">Types de bâtiment</h2>
+        <a class="btn btn--primary" href="{% url 'thermo:categorie_batiment_creer' %}">Ajouter</a>
+      </div>
+      <div class="table table--4">
+        <div class="table__head">
+          <div>Nom</div>
+          <div>Actif</div>
+          <div></div>
+          <div></div>
+        </div>
+        {% for c in categories %}
+          <div class="table__row">
+            <div class="strong">{{ c.nom }}</div>
+            <div class="muted">{% if c.actif %}Oui{% else %}Non{% endif %}</div>
+            <div><a class="link" href="{% url 'thermo:categorie_batiment_modifier' c.pk %}">Modifier</a></div>
+            <div><a class="link" href="{% url 'thermo:categorie_batiment_supprimer' c.pk %}">Supprimer</a></div>
+          </div>
+        {% empty %}
+          <div class="empty"><div class="muted">Aucune catégorie.</div></div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="h2">Aide</h2>
+      <p class="muted">
+        Les coefficients <span class="mono">k</span> sont multipliés par les surfaces saisies lors de la création d’un bâtiment.
+        Les types désactivés n’apparaissent plus dans les formulaires.
+      </p>
+      <div class="divider"></div>
+      <div class="muted">
+        Astuce : si vous ne voyez pas un type dans les listes, vérifiez qu’il est <span class="strong">actif</span>.
+      </div>
+    </div>
+  </section>
+
+  <section class="grid" style="margin-top:16px">
+    <div class="card">
+      <div class="pagehead" style="margin-bottom:10px">
+        <h2 class="h2" style="margin:0">Planchers</h2>
+        <a class="btn btn--primary" href="{% url 'thermo:materiau_plancher_creer' %}">Ajouter</a>
+      </div>
+      {% include "thermo/materiaux/_table_coeff.html" with items=planchers edit_name="thermo:materiau_plancher_modifier" delete_name="thermo:materiau_plancher_supprimer" %}
+    </div>
+
+    <div class="card">
+      <div class="pagehead" style="margin-bottom:10px">
+        <h2 class="h2" style="margin:0">Murs</h2>
+        <a class="btn btn--primary" href="{% url 'thermo:materiau_mur_creer' %}">Ajouter</a>
+      </div>
+      {% include "thermo/materiaux/_table_coeff.html" with items=murs edit_name="thermo:materiau_mur_modifier" delete_name="thermo:materiau_mur_supprimer" %}
+    </div>
+  </section>
+
+  <section class="grid" style="margin-top:16px">
+    <div class="card">
+      <div class="pagehead" style="margin-bottom:10px">
+        <h2 class="h2" style="margin:0">Toitures</h2>
+        <a class="btn btn--primary" href="{% url 'thermo:materiau_toiture_creer' %}">Ajouter</a>
+      </div>
+      {% include "thermo/materiaux/_table_coeff.html" with items=toitures edit_name="thermo:materiau_toiture_modifier" delete_name="thermo:materiau_toiture_supprimer" %}
+    </div>
+
+    <div class="card">
+      <div class="pagehead" style="margin-bottom:10px">
+        <h2 class="h2" style="margin:0">Ouvrants</h2>
+        <a class="btn btn--primary" href="{% url 'thermo:materiau_ouvrant_creer' %}">Ajouter</a>
+      </div>
+      {% include "thermo/materiaux/_table_coeff.html" with items=ouvrants edit_name="thermo:materiau_ouvrant_modifier" delete_name="thermo:materiau_ouvrant_supprimer" %}
+    </div>
+  </section>
+{% endblock %}

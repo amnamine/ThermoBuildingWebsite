@@ -1,0 +1,20 @@
+<div class="table">
+  <div class="table__head">
+    <div>Nom</div>
+    <div>k</div>
+    <div>Actif</div>
+    <div></div>
+    <div></div>
+  </div>
+  {% for it in items %}
+    <div class="table__row">
+      <div class="strong">{{ it.nom }}</div>
+      <div class="mono">{{ it.k }}</div>
+      <div class="muted">{% if it.actif %}Oui{% else %}Non{% endif %}</div>
+      <div><a class="link" href="{% url edit_name it.pk %}">Modifier</a></div>
+      <div><a class="link" href="{% url delete_name it.pk %}">Supprimer</a></div>
+    </div>
+  {% empty %}
+    <div class="empty"><div class="muted">Aucun élément.</div></div>
+  {% endfor %}
+</div>

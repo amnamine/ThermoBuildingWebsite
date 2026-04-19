@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Supprimer — Meriel Thermique{% endblock %}
+{% block content %}
+  <div class="pagehead">
+    <div>
+      <div class="kicker">Suppression</div>
+      <h1 class="h1">{{ titre }}</h1>
+      <p class="muted"><span class="mono">{{ objet }}</span></p>
+    </div>
+    <div class="pagehead__actions">
+      <a class="btn btn--ghost" href="{% url 'thermo:materiaux_hub' %}">Annuler</a>
+    </div>
+  </div>
+
+  <form method="post" class="card">
+    {% csrf_token %}
+    <div class="alert alert--danger">Confirmez la suppression.</div>
+    <div class="actions">
+      <button class="btn btn--danger" type="submit">Oui, supprimer</button>
+    </div>
+  </form>
+{% endblock %}

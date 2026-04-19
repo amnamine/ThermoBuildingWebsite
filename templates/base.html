@@ -24,6 +24,7 @@
           {% if user.is_authenticated %}
             <a class="nav__link" href="{% url 'thermo:batiment_liste' %}">Bâtiments</a>
             <a class="nav__link" href="{% url 'thermo:batiment_creer' %}">Nouveau</a>
+            <a class="nav__link" href="{% url 'thermo:materiaux_hub' %}">Matériaux</a>
             <a class="nav__link" href="/admin/">Admin</a>
             <form class="nav__form" method="post" action="{% url 'logout' %}">
               {% csrf_token %}
