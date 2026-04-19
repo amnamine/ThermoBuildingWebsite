@@ -1,0 +1,5 @@
+{% if classe %}
+  <span class="badge badge--classe badge--{{ classe|lower }}">{{ classe }}</span>
+{% else %}
+  <span class="badge badge--muted">—</span>
+{% endif %}

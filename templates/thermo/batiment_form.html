@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}{% if mode == "modification" %}Modifier{% else %}Nouveau{% endif %} — Bâtiment{% endblock %}
+{% block content %}
+  <div class="pagehead">
+    <div>
+      <div class="kicker">Bâtiment</div>
+      <h1 class="h1">{% if mode == "modification" %}Modifier{% else %}Créer{% endif %} un bâtiment</h1>
+      <p class="muted">Choisissez les matériaux (listes déroulantes) et indiquez les surfaces.</p>
+    </div>
+  </div>
+
+  <form method="post" class="card form">
+    {% csrf_token %}
+
+    <div class="grid grid--2">
+      <div class="field">
+        <label class="label" for="{{ form.nom.id_for_label }}">Nom</label>
+        {{ form.nom }}
+      </div>
+      <div class="field">
+        <label class="label" for="{{ form.surface_habitable_m2.id_for_label }}">Surface habitable (m²)</label>
+        {{ form.surface_habitable_m2 }}
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label" for="{{ form.description.id_for_label }}">Description (optionnel)</label>
+      {{ form.description }}
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="grid grid--2">
+      <div class="field">
+        <label class="label" for="{{ form.type_plancher.id_for_label }}">Type de plancher</label>
+        {{ form.type_plancher }}
+      </div>
+      <div class="field">
+        <label class="label" for="{{ form.surface_plancher_m2.id_for_label }}">Surface plancher (m²)</label>
+        {{ form.surface_plancher_m2 }}
+      </div>
+
+      <div class="field">
+        <label class="label" for="{{ form.type_mur.id_for_label }}">Type de mur</label>
+        {{ form.type_mur }}
+      </div>
+      <div class="field">
+        <label class="label" for="{{ form.surface_mur_m2.id_for_label }}">Surface murs (m²)</label>
+        {{ form.surface_mur_m2 }}
+      </div>
+
+      <div class="field">
+        <label class="label" for="{{ form.type_toiture.id_for_label }}">Type de toiture</label>
+        {{ form.type_toiture }}
+      </div>
+      <div class="field">
+        <label class="label" for="{{ form.surface_toiture_m2.id_for_label }}">Surface toiture (m²)</label>
+        {{ form.surface_toiture_m2 }}
+      </div>
+
+      <div class="field">
+        <label class="label" for="{{ form.type_ouvrant.id_for_label }}">Type d’ouvrant</label>
+        {{ form.type_ouvrant }}
+      </div>
+      <div class="field">
+        <label class="label" for="{{ form.surface_ouvrants_m2.id_for_label }}">Surface ouvrants (m²)</label>
+        {{ form.surface_ouvrants_m2 }}
+      </div>
+    </div>
+
+    {% if form.non_field_errors %}
+      <div class="alert alert--danger">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <div class="actions">
+      <button class="btn btn--primary" type="submit">
+        {% if mode == "modification" %}Enregistrer{% else %}Créer{% endif %}
+      </button>
+      <a class="btn btn--ghost" href="{% url 'thermo:batiment_liste' %}">Annuler</a>
+    </div>
+  </form>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Bâtiments — Meriel Thermique{% endblock %}
+{% block content %}
+  <div class="pagehead">
+    <div>
+      <h1 class="h1">Bâtiments</h1>
+      <p class="muted">Liste complète des bâtiments et leur performance énergétique.</p>
+    </div>
+    <div class="pagehead__actions">
+      <a class="btn btn--primary" href="{% url 'thermo:batiment_creer' %}">Nouveau bâtiment</a>
+    </div>
+  </div>
+
+  <div class="card">
+    {% if batiments %}
+      <div class="table">
+        <div class="table__head">
+          <div>Nom</div>
+          <div>Classe</div>
+          <div>Conso (kWh/m²/an)</div>
+          <div>Déperdition totale</div>
+          <div></div>
+        </div>
+        {% for b in batiments %}
+          <div class="table__row">
+            <div class="strong">{{ b.nom }}</div>
+            <div>{% include "partials/badge_classe.html" with classe=b.classe_energie %}</div>
+            <div class="mono">{{ b.consommation_kwh_m2_an|floatformat:2 }}</div>
+            <div class="mono">{{ b.deperdition_totale|floatformat:2 }}</div>
+            <div><a class="link" href="{% url 'thermo:batiment_detail' b.pk %}">Détails →</a></div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty">
+        <div class="empty__icon">+</div>
+        <div>
+          <div class="strong">Aucun bâtiment.</div>
+          <div class="muted">Créez votre premier bâtiment pour démarrer.</div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Supprimer — {{ batiment.nom }}{% endblock %}
+{% block content %}
+  <div class="pagehead">
+    <div>
+      <div class="kicker">Suppression</div>
+      <h1 class="h1">Supprimer “{{ batiment.nom }}” ?</h1>
+      <p class="muted">Cette action est irréversible.</p>
+    </div>
+  </div>
+
+  <form method="post" class="card">
+    {% csrf_token %}
+    <div class="alert alert--danger">
+      Confirmez la suppression du bâtiment.
+    </div>
+    <div class="actions">
+      <button class="btn btn--danger" type="submit">Oui, supprimer</button>
+      <a class="btn btn--ghost" href="{% url 'thermo:batiment_detail' batiment.pk %}">Annuler</a>
+    </div>
+  </form>
+{% endblock %}

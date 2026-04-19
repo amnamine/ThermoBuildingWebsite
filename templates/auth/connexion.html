@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Connexion — Meriel Thermique{% endblock %}
+
+{% block content %}
+  <section class="auth">
+    <div class="card card--glow">
+      <div class="card__header">
+        <h1 class="h1">Connexion</h1>
+        <p class="muted">Accédez au tableau de bord pour calculer et classifier vos bâtiments.</p>
+      </div>
+
+      {% if form.errors %}
+        <div class="alert alert--danger">
+          Identifiants incorrects. Réessayez.
+        </div>
+      {% endif %}
+
+      <form method="post" class="form">
+        {% csrf_token %}
+
+        <div class="field">
+          <label class="label" for="id_username">Nom d’utilisateur</label>
+          {{ form.username }}
+        </div>
+
+        <div class="field">
+          <label class="label" for="id_password">Mot de passe</label>
+          {{ form.password }}
+        </div>
+
+        <button class="btn btn--primary btn--block" type="submit">Se connecter</button>
+
+        <div class="helper">
+          <div class="pill">Compte admin: <strong>admin</strong>/<strong>admin</strong></div>
+          <div class="pill">Compte utilisateur: <strong>user</strong>/<strong>user</strong></div>
+        </div>
+      </form>
+    </div>
+
+    <div class="auth__side">
+      <div class="card">
+        <h2 class="h2">Ce que vous pouvez faire</h2>
+        <ul class="list">
+          <li>Choisir les matériaux (plancher, murs, toiture, ouvrants)</li>
+          <li>Calculer les déperditions \(k \times surface\)</li>
+          <li>Obtenir une consommation normalisée (kWh/m²/an)</li>
+          <li>Classer le bâtiment de <strong>A</strong> à <strong>G</strong></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+{% endblock %}

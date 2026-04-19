@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}{{ batiment.nom }} — Meriel Thermique{% endblock %}
+{% block content %}
+  <div class="pagehead">
+    <div>
+      <div class="kicker">Bâtiment</div>
+      <h1 class="h1">{{ batiment.nom }}</h1>
+      {% if batiment.description %}<p class="muted">{{ batiment.description }}</p>{% endif %}
+    </div>
+    <div class="pagehead__actions">
+      <a class="btn btn--ghost" href="{% url 'thermo:batiment_modifier' batiment.pk %}">Modifier</a>
+      <a class="btn btn--danger" href="{% url 'thermo:batiment_supprimer' batiment.pk %}">Supprimer</a>
+    </div>
+  </div>
+
+  <section class="grid grid--2">
+    <div class="card">
+      <h2 class="h2">Résultat</h2>
+      <div class="result">
+        <div class="result__main">
+          <div class="result__badge">{% include "partials/badge_classe.html" with classe=batiment.classe_energie %}</div>
+          <div>
+            <div class="result__label">Consommation</div>
+            <div class="result__value mono">{{ batiment.consommation_kwh_m2_an|floatformat:2 }} <span class="unit">kWh/m²/an</span></div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="kv">
+          <div class="kv__row"><div>Déperdition totale</div><div class="mono">{{ batiment.deperdition_totale|floatformat:2 }}</div></div>
+          <div class="kv__row"><div>Surface habitable</div><div class="mono">{{ batiment.surface_habitable_m2|floatformat:2 }} m²</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="h2">Détail des déperditions</h2>
+      <div class="kv">
+        <div class="kv__row">
+          <div>Plancher — {{ batiment.type_plancher.nom }} (k={{ batiment.type_plancher.k }})</div>
+          <div class="mono">{{ batiment.deperdition_plancher|floatformat:2 }}</div>
+        </div>
+        <div class="kv__row">
+          <div>Murs — {{ batiment.type_mur.nom }} (k={{ batiment.type_mur.k }})</div>
+          <div class="mono">{{ batiment.deperdition_murs|floatformat:2 }}</div>
+        </div>
+        <div class="kv__row">
+          <div>Toiture — {{ batiment.type_toiture.nom }} (k={{ batiment.type_toiture.k }})</div>
+          <div class="mono">{{ batiment.deperdition_toiture|floatformat:2 }}</div>
+        </div>
+        <div class="kv__row">
+          <div>Ouvrants — {{ batiment.type_ouvrant.nom }} (k={{ batiment.type_ouvrant.k }})</div>
+          <div class="mono">{{ batiment.deperdition_ouvrants|floatformat:2 }}</div>
+        </div>
+      </div>
+      <div class="muted mt">
+        Formule: déperdition = k × surface, puis somme (murs + plancher + ouvrants + toiture).
+      </div>
+    </div>
+  </section>
+{% endblock %}
